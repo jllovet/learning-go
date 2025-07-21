@@ -25,6 +25,10 @@ mkdir config
 touch config/env.go
 touch .env
 touch docker-compose.yaml
+mkdir types
+touch types/types.go
+mkdir io
+touch io/io.go
 ```
 
 # Running
