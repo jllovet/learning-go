@@ -9,28 +9,6 @@ go get github.com/go-sql-driver/mysql
 go get github.com/joho/godotenv
 ```
 
-```shell
-mkdir cmd
-mkdir cmd/api
-mkdir cmd/migrate
-touch cmd/api/api.go
-touch cmd/main.go
-mkdir services
-mkdir services/user
-touch services/user/routes.go
-touch Makefile
-mkdir db
-touch db/db.go
-mkdir config
-touch config/env.go
-touch .env
-touch docker-compose.yaml
-mkdir types
-touch types/types.go
-mkdir io
-touch io/io.go
-```
-
 # Running
 
 To run the API, we can use the Makefile we have built.
