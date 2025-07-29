@@ -4,10 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	ecomio "github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/io"
 	"github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/services/auth"
 	"github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/types"
+	"github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/validation"
 )
 
 type Handler struct {
@@ -30,10 +32,20 @@ func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 	// get JSON payload
 	var payload types.RegisterUserPayload
-	if err := ecomio.ParseJSON(r, payload); err != nil {
+	if err := ecomio.ParseJSON(r, &payload); err != nil {
 		ecomio.WriteError(w, http.StatusBadRequest, err)
 		return
 	}
+	// validate the payload
+
+	if err := validation.Validate.Struct(payload); err != nil {
+		ecomio.WriteError(
+			w,
+			http.StatusBadRequest,
+			fmt.Errorf("invlaid payload: %v", err.(validator.ValidationErrors)))
+		return
+	}
+
 	// check if the user exists
 	_, err := h.store.GetUserByEmail(payload.Email)
 
