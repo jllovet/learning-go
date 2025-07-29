@@ -23,7 +23,7 @@ func initConfig() Config {
 	return Config{
 		PublicHost: getEnv("ECOM_PUBLIC_HOST", "http://localhost"),
 		Port:       getEnv("ECOM_PORT", "8080"),
-		DBUser:     getEnv("ECOM_DB_USER", "root"),
+		DBUser:     getEnv("ECOM_DB_USER", "mysql"),
 		DBPassword: getEnv("ECOM_DB_PASSWORD", "password"),
 		DBAddress:  fmt.Sprintf("%s:%s", getEnv("ECOM_DB_HOST", "127.0.0.1"), getEnv("ECOM_DB_PORT", "3306")),
 		DBName:     getEnv("ECOM_DB_NAME", "ecom"),
