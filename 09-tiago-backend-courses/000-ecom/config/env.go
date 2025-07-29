@@ -7,8 +7,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-var Envs = initConfig()
-
 type Config struct {
 	PublicHost string
 	Port       string
@@ -18,7 +16,7 @@ type Config struct {
 	DBName     string
 }
 
-func initConfig() Config {
+func InitConfig() Config {
 	godotenv.Load()
 	return Config{
 		PublicHost: getEnv("ECOM_PUBLIC_HOST", "http://localhost"),

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 
@@ -12,11 +11,12 @@ import (
 )
 
 func main() {
-	db, err := db.NewMySQLStorage(mysql.Config{
-		User:                 config.Envs.DBUser,
-		Passwd:               config.Envs.DBPassword,
-		Addr:                 config.Envs.DBAddress,
-		DBName:               config.Envs.DBName,
+	var Envs = config.InitConfig()
+	database, err := db.NewMySQLStorage(mysql.Config{
+		User:                 Envs.DBUser,
+		Passwd:               Envs.DBPassword,
+		Addr:                 Envs.DBAddress,
+		DBName:               Envs.DBName,
 		Net:                  "tcp",
 		AllowNativePasswords: true,
 		ParseTime:            true,
@@ -24,18 +24,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
-	initStorage(db)
-	server := api.NewAPIServer(fmt.Sprintf(":%s", config.Envs.Port), db)
+	defer database.Close()
+	db.InitStorage(database)
+	server := api.NewAPIServer(fmt.Sprintf(":%s", Envs.Port), database)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func initStorage(db *sql.DB) {
-	err := db.Ping()
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.Println("DB: Successfully connected!")
 }
