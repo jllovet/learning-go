@@ -38,7 +38,7 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 	}
 	// validate the payload
 
-	if err := validation.Validate.Struct(payload); err != nil {
+	if err := validation.Validate().Struct(payload); err != nil {
 		ecomio.WriteError(
 			w,
 			http.StatusBadRequest,
