@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
+	"github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/config"
 	ecomio "github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/io"
 	"github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/services/auth"
 	"github.com/jllovet/learning-go/09-tiago-backend-courses/000-ecom/types"
@@ -26,7 +27,38 @@ func (h *Handler) RegisterRoutes(router *mux.Router) {
 }
 
 func (h *Handler) handleLogin(w http.ResponseWriter, r *http.Request) {
-
+	// get JSON payload
+	var payload types.LoginUserPayload
+	if err := ecomio.ParseJSON(r, &payload); err != nil {
+		ecomio.WriteError(w, http.StatusBadRequest, err)
+		return
+	}
+	// validate the payload
+	if err := validation.Validate().Struct(payload); err != nil {
+		ecomio.WriteError(
+			w,
+			http.StatusBadRequest,
+			fmt.Errorf("invlaid payload: %v", err.(validator.ValidationErrors)))
+		return
+	}
+	// check if the user exists
+	u, err := h.store.GetUserByEmail(payload.Email)
+	if err != nil {
+		ecomio.WriteError(w, http.StatusBadRequest, fmt.Errorf("not found, invalid username or password"))
+		return
+	}
+	// compare password provided in payload to hashed password from db
+	if !auth.ComparePasswords(u.Password, payload.Password) {
+		ecomio.WriteError(w, http.StatusBadRequest, fmt.Errorf("not found, invalid username or password"))
+		return
+	}
+	secret := []byte(config.InitializedConfig.JWTSecret)
+	token, err := auth.CreateJWT(secret, u.ID)
+	if err != nil {
+		ecomio.WriteError(w, http.StatusInternalServerError, err)
+		return
+	}
+	ecomio.WriteJSON(w, http.StatusOK, map[string]string{"token": token})
 }
 
 func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +69,6 @@ func (h *Handler) handleRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// validate the payload
-
 	if err := validation.Validate().Struct(payload); err != nil {
 		ecomio.WriteError(
 			w,

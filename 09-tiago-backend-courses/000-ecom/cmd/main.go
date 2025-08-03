@@ -11,12 +11,12 @@ import (
 )
 
 func main() {
-	var Envs = config.InitConfig()
+	cfg := config.InitializedConfig
 	database, err := db.NewMySQLStorage(mysql.Config{
-		User:                 Envs.DBUser,
-		Passwd:               Envs.DBPassword,
-		Addr:                 Envs.DBAddress,
-		DBName:               Envs.DBName,
+		User:                 cfg.DBUser,
+		Passwd:               cfg.DBPassword,
+		Addr:                 cfg.DBAddress,
+		DBName:               cfg.DBName,
 		Net:                  "tcp",
 		AllowNativePasswords: true,
 		ParseTime:            true,
@@ -26,7 +26,7 @@ func main() {
 	}
 	defer database.Close()
 	db.InitStorage(database)
-	server := api.NewAPIServer(fmt.Sprintf(":%s", Envs.Port), database)
+	server := api.NewAPIServer(fmt.Sprintf(":%s", cfg.Port), database)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
