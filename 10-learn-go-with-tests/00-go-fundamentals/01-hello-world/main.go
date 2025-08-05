@@ -2,8 +2,15 @@ package main
 
 import "fmt"
 
+const enGreetingPrefix = "Hello, "
+
 func Hello(name string) string {
-	return fmt.Sprintf("Hello, %s", name)
+	switch name {
+	case "":
+		return enGreetingPrefix + "World"
+	default:
+		return enGreetingPrefix + name
+	}
 }
 
 func main() {
