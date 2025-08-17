@@ -1,5 +1,7 @@
 package iteration
 
+import "strings"
+
 func Repeat(s string, count int) string {
 	// see strings.Repeat
 	var repeated string
@@ -7,4 +9,8 @@ func Repeat(s string, count int) string {
 		repeated += s
 	}
 	return repeated
+}
+
+func StdLibRepeat(s string, count int) string {
+	return strings.Repeat(s, count)
 }
