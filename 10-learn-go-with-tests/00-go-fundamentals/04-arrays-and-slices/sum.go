@@ -36,3 +36,20 @@ func SumAll(ns ...[]int) []int {
 	}
 	return sums
 }
+
+func tail(n []int) []int {
+	switch len(n) {
+	case 0:
+		return []int{}
+	default:
+		return n[1:]
+	}
+}
+
+func SumAllTails(ns ...[]int) []int {
+	tails := make([]int, len(ns))
+	for i, n := range ns {
+		tails[i] = Sum(tail(n))
+	}
+	return tails
+}
