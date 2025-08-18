@@ -1,4 +1,4 @@
-package main
+package arraysandslices
 
 func recursiveSum(n []int) int {
 	// Benchmark with 100000 ints, goos: darwin, goarch: arm64, cpu: Apple M2 Pro
