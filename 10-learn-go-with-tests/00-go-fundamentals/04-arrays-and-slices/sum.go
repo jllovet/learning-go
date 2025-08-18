@@ -28,3 +28,11 @@ func iterativeSum(n []int) int {
 func Sum(n []int) int {
 	return iterativeSum(n)
 }
+
+func SumAll(ns ...[]int) []int {
+	sums := make([]int, len(ns))
+	for i, n := range ns {
+		sums[i] = Sum(n)
+	}
+	return sums
+}
