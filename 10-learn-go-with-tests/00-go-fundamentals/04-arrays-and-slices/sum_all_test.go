@@ -1,7 +1,6 @@
 package arraysandslices
 
 import (
-	"slices"
 	"testing"
 )
 

@@ -5,13 +5,6 @@ import (
 	"testing"
 )
 
-func assertCorrectMessage(t testing.TB, got, want any) {
-	t.Helper()
-	if got != want {
-		t.Errorf("got %v want %v", got, want)
-	}
-}
-
 func ExampleSum() {
 	n := []int{1, 2, 3, 4, 5}
 	sum := Sum(n)
