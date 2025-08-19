@@ -1,6 +1,7 @@
 package smi
 
 import (
+	"math"
 	"testing"
 )
 
@@ -21,15 +22,19 @@ func TestArea(t *testing.T) {
 			t.Errorf("got %.2f want %.2f", got, want)
 		}
 	}
-	t.Run("rectangles", func(t *testing.T) {
-		r := Rectangle{Length: 12.0, Width: 6.0}
-		want := 72.0
-		checkArea(t, r, want)
-	})
-	t.Run("circles", func(t *testing.T) {
-		c := Circle{10}
-		want := 314.1592653589793
-		checkArea(t, c, want)
-	})
-
+	areaTests := []struct {
+		name  string
+		shape Shape
+		want  float64
+	}{
+		{name: "rectangle 10x10", shape: Rectangle{Length: 10.0, Width: 10.0}, want: 100.0},
+		{name: "rectangle 2x4", shape: Rectangle{Length: 2.0, Width: 4.0}, want: 8.0},
+		{name: "circle r=4", shape: Circle{Radius: 4.0}, want: 16 * math.Pi},
+	}
+	for _, tt := range areaTests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			checkArea(t, tt.shape, tt.want)
+		})
+	}
 }
