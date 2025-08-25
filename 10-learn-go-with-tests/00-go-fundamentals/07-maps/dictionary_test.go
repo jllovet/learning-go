@@ -21,7 +21,6 @@ func TestSearch(t *testing.T) {
 		}
 		assertError(t, err, ErrNotFound)
 	})
-
 }
 
 func assertString(t testing.TB, got, want string) {
