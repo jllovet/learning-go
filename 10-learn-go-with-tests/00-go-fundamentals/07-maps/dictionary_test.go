@@ -24,11 +24,20 @@ func TestSearch(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
-	t.Run("add a word", func(t *testing.T) {
+	t.Run("new word", func(t *testing.T) {
 		d := Dictionary{}
 		word := "test"
 		definition := "this is just a test"
-		d.Add(word, definition)
+		err := d.Add(word, definition)
+		assertError(t, err, nil)
+		assertDefinition(t, d, word, definition)
+	})
+	t.Run("existing word", func(t *testing.T) {
+		word := "test"
+		definition := "this is just a test"
+		d := Dictionary{word: definition}
+		err := d.Add(word, "new definition")
+		assertError(t, err, ErrWordExists)
 		assertDefinition(t, d, word, definition)
 	})
 }
